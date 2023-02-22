@@ -15,4 +15,4 @@ $("[style*='s500']").each(function() {
   style = style.replace("s500", "s500-rw");
   $(this).attr("style", style);
 });
-jQuery(document).ready(function($){ $(".tabbed-widget-content-widget-themater_tabs-1432447472-id").hide(); $("ul.tabbed-widget-widget-themater_tabs-1432447472-id li:first a").addClass("tabbed-widget-current").show(); $(".tabbed-widget-content-widget-themater_tabs-1432447472-id:first").show(); $("ul.tabbed-widget-widget-themater_tabs-1432447472-id li a").click(function() { $("ul.tabbed-widget-widget-themater_tabs-1432447472-id li a").removeClass("tabbed-widget-current a"); $(this).addClass("tabbed-widget-current"); $(".tabbed-widget-content-widget-themater_tabs-1432447472-id").hide(); var activeTab = $(this).attr("href"); $(activeTab).fadeIn(); return false; }); });
+$(document).ready((function(){$(".tabx span").click((function(){var a=$(this).attr("data-tab");$(".tabx span").removeClass("active"),$(".PopularPosts").removeClass("current"),$(this).addClass("active"),$("#"+a).addClass("current")}))}));
