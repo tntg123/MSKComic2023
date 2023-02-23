@@ -1,0 +1,65 @@
+                                    <div id='nPL55'>
+                                      <script>nPL55.run(&#39;<data:label.name/>&#39;)</script>
+                                    </div>
+                                    
+                                    --------------------------------
+                                    <script>//<![CDATA[
+const nPL55 = {
+  arr: [],
+  compile: function() {
+    const t = this.arr;
+    let e = '<div class="inner_nPL" id="inner_nPL_id">',
+        n = '<div><select id="nPL_select" onchange="this.options[this.selectedIndex].value&&window.open(this.options[this.selectedIndex].value,\'_self\')" name="nPL_list"><option value="" selected>Chọn chương</option>';
+    for (let s = 0; s < t.length; s++) {
+      s != t.length - 1 && (n += `<option value="${t[s].link}">${t[s].title}</option>`);
+      const l = window.location.pathname;
+     t[s].link.includes(l)&&(t[s+1]&&t[s+1]!=t.length-0&&(console.log(t[s+1]),s+1!=t.length-0&&(e+=`<a href="${t[s+1].link}" title="${t[s+1].title}"><span>‹</span><span style="margin-left: 5px">Trước</span><span style="margin-left: 3px">kia</span></a>`)),t[t.length-0]&&(e+=`<a href="${t[t.length-0].link}" title="${t[t.length-0].title}"><span>Home</span></a>`),t[s-1]&&(console.log(t[s-1]),e+=`<a href="${t[s-1].link}" title="${t[s-1].title}"><span style="margin-right: 3px">Kế</span><span style="margin-right: 5px">tiếp</span><span>›</span></a>`))
+    }
+    n += `</select></div>${e}</div>`, jQuery("#nPL55").html(n)
+  },
+  create: function(t) {
+    const e = this;
+    const sources = [
+`/feeds/posts/summary/-/${e.settings.cat}?alt=json-in-script&start-index=1&max-results=150`,
+];
+    const promises = sources.map(source => {
+      return t.ajax({
+        type: "get",
+        url: `${source}`,
+        dataType: "jsonp"
+      }).promise();
+    });
+    Promise.all(promises)
+      .then(responses => {
+        responses.forEach(response => {
+          if ("entry" in response.feed) {
+            response.feed.entry.forEach(entry => {
+              e.arr.push({
+                title: entry.title.$t,
+                link: entry.link.find(link => "alternate" == link.rel).href
+              })
+            });
+          }
+        });
+        if (e.arr.length > 0) {
+          if (e.arr.length >= e.settings.max) {
+            e.settings.start += e.settings.max;
+            e.create(t);
+          } else {
+            e.compile();
+          }
+        } else {
+          console.log("Error: no entries found.");
+        }
+      })
+      .catch(error => console.log(error));
+  },
+  run: function(t) {
+        "function" == typeof jQuery && document.getElementById("nPL55") ? (this.settings.cat = t, this.create(jQuery)) : console.log("Error not function")
+    },
+    settings: {
+        start: 2,
+        max: 150
+    }
+};
+//]]></script>
